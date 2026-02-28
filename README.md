@@ -50,3 +50,114 @@ All protected routes require:
 
 ```http
 Authorization: Bearer <JWT>
+```
+---
+
+## 🚀 Future Scope
+
+- **👥 Assistant Integration** – Implement a third user tier for Legal Assistants to manage documentation and scheduling on behalf of Attorneys.
+- **🖇️ Multi-User Case Assignment** – Enable assigning multiple Assistants and Attorneys to a single high-complexity case.
+- **📅 Calendar Sync** – Integration with Outlook and Google Calendar for deadline tracking and automated reminders.
+- **⚖️ AI Document Summarization** – Automated extraction of key insights and summaries from legal filings using AI models.
+- **📊 Advanced Analytics Dashboard** – Predictive insights based on case trends and workload distribution.
+- **🔔 Real-Time Notifications** – WebSocket-based live alerts for task updates, case changes, and document uploads.
+
+---
+
+## 🌱 Seed Data (Database Initialization)
+
+The `seed/` folder contains scripts used to populate the database with initial sample data.
+
+### Why It Was Used
+
+- Quickly initialize the database with predefined users
+- Insert sample clients and cases for testing
+- Demonstrate application features without manual data entry
+- Ensure consistent data structure during development and evaluation
+
+### How to Run Seed Script (If Required)
+
+Navigate to the backend folder:
+
+```bash
+cd backend
+node seed/seed.js
+```
+## 🧩 Getting Started
+
+Follow these steps to run the project locally.
+
+### Backend Setup
+
+1. Navigate to the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in `backend/` with the following keys:
+   ```dotenv
+    MONGO_URI=<mongodb://user:pass@host:port/db>
+    JWT_SECRET=<string used for jsonwebtoken>
+    JWT_EXPIRES_IN=<token lifetime, e.g. "8h" or "2d">
+    CLIENT_URL=http://localhost:5
+   ```
+4. Seed data (optional):
+   ```bash
+   npm run seed
+   ```
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   or for production:
+   ```bash
+   npm start
+   ```
+
+### Frontend Setup
+
+1. Change to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in `frontend/` containing:
+   ```dotenv
+   VITE_API_BASE_URL=http://localhost:5000/api
+   ```
+   Adjust the URL if your backend runs elsewhere.
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🔧 Environment Variables Format
+
+### Backend `.env`
+```
+MONGO_URI=<mongodb://user:pass@host:port/db>
+JWT_SECRET=<string used for jsonwebtoken>
+JWT_EXPIRES_IN=<token lifetime, e.g. "8h" or "2d">
+CLIENT_URL=http://localhost:5173
+PORT=<optional port number>
+```
+### Frontend `.env`
+```
+VITE_API_BASE_URL=<backend API base URL>
+```
+
+---
+
+## 👨‍💻 Developer
+
+Amogh Pai  
+Full-Stack Developer | Backend & Systems Focused
+
