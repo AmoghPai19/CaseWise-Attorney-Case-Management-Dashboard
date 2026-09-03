@@ -1,28 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap');
-
-@font-face {
-  font-family: 'BluuNext';
-  src: url('../../fonts/BluuNext-Titling.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'BluuNext';
-  src: url('../../fonts/BluuNext-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'BluuNext';
-  src: url('../../fonts/BluuNext-Bolditalic.otf') format('opentype');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -38,14 +14,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0F1115;
+  background: #F7F7F8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2A2F3A;
+  background: #D1D5DB;
   border-radius: 999px;
 }
-/* Fix date input calendar icon color */
+
+/* Fix date input calendar icon color on a light background */
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  filter: none;
+  opacity: 0.6;
 }

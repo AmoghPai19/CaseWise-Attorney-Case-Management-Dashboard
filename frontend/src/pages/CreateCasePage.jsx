@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 
@@ -14,7 +14,8 @@ function CreateCasePage() {
     clientId: "",
     priority: "Medium",
     deadline: "",
-    tags: ""
+    tags: "",
+    feeAmount: ""
   });
 
   useEffect(() => {
@@ -47,6 +48,7 @@ function CreateCasePage() {
 
       const res = await api.post("/cases", {
         ...form,
+        feeAmount: form.feeAmount === "" ? 0 : form.feeAmount,
         tags: form.tags ? form.tags.split(",").map(t => t.trim()) : []
       });
 
@@ -184,13 +186,30 @@ function CreateCasePage() {
               className="w-full rounded-lg border border-border bg-background px-4 py-3 text-textPrimary focus:outline-none focus:ring-1 focus:ring-accent"
             />
           </div>
+
+          {/* Fee Amount */}
+          <div>
+            <label className="block text-sm text-textSecondary mb-2">
+              Fee Amount ($)
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="50"
+              name="feeAmount"
+              value={form.feeAmount}
+              onChange={handleChange}
+              placeholder="0"
+              className="w-full rounded-lg border border-border bg-background px-4 py-3 text-textPrimary focus:outline-none focus:ring-1 focus:ring-accent"
+            />
+          </div>
         </div>
 
         {/* Submit */}
         <div className="pt-4">
           <button
             disabled={loading}
-            className="rounded-lg bg-accent px-8 py-3 text-sm font-medium text-black transition hover:opacity-90 disabled:opacity-60"
+            className="rounded-lg bg-accent px-8 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-60"
           >
             {loading ? "Creating..." : "Create Case"}
           </button>

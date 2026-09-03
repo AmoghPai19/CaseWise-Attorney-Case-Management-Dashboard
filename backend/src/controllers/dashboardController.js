@@ -1,6 +1,7 @@
-const Case = require('../models/Case');
+﻿const Case = require('../models/Case');
 const Task = require('../models/Task');
 const Document = require('../models/Document');
+const User = require('../models/User');
 
 function buildCaseFilterForUser(user) {
   if (user.role === 'Admin') return {};
@@ -141,13 +142,13 @@ async function getOverviewStats(req, res, next) {
       });
 
     // -----------------------------------
-    // TASK BREAKDOWN
+    // TASK BREAKDOWN (by status — Task has no `category` field)
     // -----------------------------------
     const taskAgg = await Task.aggregate([
       { $match: taskFilter },
       {
         $group: {
-          _id: '$category',
+          _id: '$status',
           completed: {
             $sum: {
               $cond: [{ $eq: ['$status', 'Completed'] }, 1, 0],
@@ -172,7 +173,7 @@ async function getOverviewStats(req, res, next) {
     ]);
 
     const taskBreakdown = taskAgg.map((row) => ({
-      category: row._id,
+      status: row._id,
       completed: row.completed,
       overdue: row.overdue,
     }));
@@ -195,6 +196,48 @@ async function getOverviewStats(req, res, next) {
       { level: 'Low Risk', value: lowRisk },
     ];
 
+    // -----------------------------------
+    // REVENUE
+    // caseFilter already scopes to "own cases" for Attorney/Assistant and
+    // "all cases" for Admin, so totalRevenue is automatically role-correct.
+    // -----------------------------------
+    const revenueAgg = await Case.aggregate([
+      { $match: caseFilter },
+      { $group: { _id: null, total: { $sum: '$feeAmount' } } },
+    ]);
+    const totalRevenue = revenueAgg[0]?.total || 0;
+
+    // Only Admins get the per-attorney breakdown — everyone else only ever
+    // sees their own total above.
+    let revenueByAttorney = [];
+    if (req.user.role === 'Admin') {
+      const byAttorneyAgg = await Case.aggregate([
+        {
+          $group: {
+            _id: '$assignedAttorney',
+            revenue: { $sum: '$feeAmount' },
+            caseCount: { $sum: 1 },
+          },
+        },
+        { $sort: { revenue: -1 } },
+      ]);
+
+      const attorneyIds = byAttorneyAgg.map((row) => row._id);
+      const attorneys = await User.find({ _id: { $in: attorneyIds } }).select(
+        'name email'
+      );
+      const attorneyById = new Map(
+        attorneys.map((a) => [String(a._id), a])
+      );
+
+      revenueByAttorney = byAttorneyAgg.map((row) => ({
+        attorneyId: row._id,
+        attorneyName: attorneyById.get(String(row._id))?.name || 'Unknown',
+        revenue: row.revenue,
+        caseCount: row.caseCount,
+      }));
+    }
+
     return res.json({
       totalActiveCases,
       casesClosingSoon,
@@ -204,6 +247,8 @@ async function getOverviewStats(req, res, next) {
       monthlyTrend,
       taskBreakdown,
       riskDistribution,
+      totalRevenue,
+      revenueByAttorney,
     });
   } catch (err) {
     return next(err);

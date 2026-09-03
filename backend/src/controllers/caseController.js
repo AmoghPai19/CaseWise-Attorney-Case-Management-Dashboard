@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+﻿const { body } = require('express-validator');
 const Case = require('../models/Case');
 const Client = require('../models/Client');
 const Task = require('../models/Task');
@@ -16,6 +16,7 @@ const caseValidation = [
   body('priority').optional().isIn(['Low', 'Medium', 'High']),
   body('startDate').optional().isISO8601().toDate(),
   body('tags').optional().isArray(),
+  body('feeAmount').optional().isFloat({ min: 0 }).withMessage('Fee must be a positive number').toFloat(),
 ];
 
 function buildCaseFilterForUser(user) {
@@ -127,6 +128,7 @@ async function createCase(req, res, next) {
       startDate: req.body.startDate || new Date(),
       deadline: req.body.deadline,
       tags: req.body.tags || [],
+      feeAmount: req.body.feeAmount || 0,
       createdBy: req.user._id,
     };
 
@@ -160,6 +162,7 @@ async function updateCase(req, res, next) {
       startDate: req.body.startDate,
       deadline: req.body.deadline,
       tags: req.body.tags,
+      feeAmount: req.body.feeAmount,
     };
 
     const caseDoc = await Case.findById(req.params.id);

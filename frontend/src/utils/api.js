@@ -1,7 +1,13 @@
-import axios from "axios";
+﻿import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+// Root of the backend server (no /api suffix), used to build links to
+// static assets like uploaded documents served from /uploads.
+export const SERVER_URL = API_URL.replace(/\/api\/?$/, "");
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: API_URL,
   withCredentials: true,
 });
 
@@ -14,7 +20,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// 🔥 Handle expired JWT
+// Handle expired/invalid JWT by clearing local state and bouncing to login
 api.interceptors.response.use(
   (response) => response,
   (error) => {

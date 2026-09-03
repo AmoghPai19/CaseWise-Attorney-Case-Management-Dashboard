@@ -1,4 +1,4 @@
-# ⚖️ CaseWise: Enterprise Attorney Case Management
+﻿# ⚖️ CaseWise: Enterprise Attorney Case Management
 
 CaseWise is a secure, full-stack legal operations platform designed to streamline case lifecycles, client relationships, and document workflows with structured access control and operational intelligence.
 
@@ -81,7 +81,7 @@ Navigate to the backend folder:
 
 ```bash
 cd backend
-node seed/seed.js
+npm run seed
 ```
 ## 🧩 Getting Started
 
@@ -97,12 +97,9 @@ Follow these steps to run the project locally.
    ```bash
    npm install
    ```
-3. Create a `.env` file in `backend/` with the following keys:
-   ```dotenv
-    MONGO_URI=<mongodb://user:pass@host:port/db>
-    JWT_SECRET=<string used for jsonwebtoken>
-    JWT_EXPIRES_IN=<token lifetime, e.g. "8h" or "2d">
-    CLIENT_URL=http://localhost:5
+3. Copy the example env file and fill in your own values:
+   ```bash
+   cp .env.example .env
    ```
 4. Seed data (optional):
    ```bash
@@ -127,11 +124,10 @@ Follow these steps to run the project locally.
    ```bash
    npm install
    ```
-3. Create a `.env` file in `frontend/` containing:
-   ```dotenv
-   VITE_API_BASE_URL=http://localhost:5000/api
+3. Copy the example env file and adjust the API URL if needed:
+   ```bash
+   cp .env.example .env
    ```
-   Adjust the URL if your backend runs elsewhere.
 4. Start the development server:
    ```bash
    npm run dev
@@ -139,19 +135,23 @@ Follow these steps to run the project locally.
 
 ---
 
-## 🔧 Environment Variables Format
+## 🔧 Environment Variables
+
+Both `backend/.env.example` and `frontend/.env.example` are checked into the repo — copy them to `.env` and fill in real values. Nothing should be committed to `.env` itself (it's git-ignored).
 
 ### Backend `.env`
 ```
-MONGO_URI=<mongodb://user:pass@host:port/db>
-JWT_SECRET=<string used for jsonwebtoken>
-JWT_EXPIRES_IN=<token lifetime, e.g. "8h" or "2d">
+NODE_ENV=development
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/casewise
 CLIENT_URL=http://localhost:5173
-PORT=<optional port number>
+JWT_SECRET=<a long random string>
+JWT_EXPIRES_IN=8h
+MAX_UPLOAD_SIZE_MB=20
 ```
 ### Frontend `.env`
 ```
-VITE_API_BASE_URL=<backend API base URL>
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ---

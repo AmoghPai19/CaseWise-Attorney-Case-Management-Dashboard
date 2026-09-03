@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -21,45 +21,44 @@ import SmartAttentionPanel from "../components/dashboard/SmartAttentionPanel";
 import { useAuth } from "../state/AuthContext";
 
 const PRIORITY_COLORS = {
-  High: "#C14953",
-  Medium: "#C5A75D",
-  Low: "#2F6F6F",
+  High: "#101113",
+  Medium: "#6B7280",
+  Low: "#D1D5DB",
 };
 
 const STATUS_COLORS = {
-  Open: "#2F6F6F",
-  Pending: "#C5A75D",
-  Closed: "#5A6472",
+  Open: "#101113",
+  Pending: "#9CA3AF",
+  Closed: "#E5E7EB",
 };
 
-const RISK_COLORS = ["#C14953", "#C5A75D", "#2F6F6F"];
+const RISK_COLORS = ["#101113", "#9CA3AF", "#E5E7EB"];
 
 /* -----------------------------
-   PREMIUM TOOLTIP – PRIORITY
+   TOOLTIP – PRIORITY
 ------------------------------ */
 const CustomPriorityTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const priority = payload[0].payload.priority;
     const count = payload[0].value;
-    const color = PRIORITY_COLORS[priority] || "#5A6472";
+    const color = PRIORITY_COLORS[priority] || "#6B7280";
 
     return (
       <div
         style={{
-          background: "rgba(18, 24, 33, 0.95)",
-          border: `1px solid ${color}`,
-          borderRadius: "14px",
+          background: "#FFFFFF",
+          border: `1px solid #E5E7EB`,
+          borderRadius: "12px",
           padding: "12px 16px",
-          backdropFilter: "blur(10px)",
-          boxShadow: "0 12px 30px rgba(0,0,0,0.45)",
+          boxShadow: "0 4px 16px rgba(16,17,19,0.08)",
           fontSize: "13px",
         }}
       >
         <div style={{ color, fontWeight: 600, marginBottom: 4 }}>
           {priority} Priority
         </div>
-        <div style={{ color: "#CBD5E1" }}>
-          Total Cases: <strong>{count}</strong>
+        <div style={{ color: "#6B7280" }}>
+          Total Cases: <strong style={{ color: "#101113" }}>{count}</strong>
         </div>
       </div>
     );
@@ -68,32 +67,30 @@ const CustomPriorityTooltip = ({ active, payload }) => {
 };
 
 /* -----------------------------
-   PREMIUM TOOLTIP – PIE CHARTS
+   TOOLTIP – PIE CHARTS
 ------------------------------ */
 const CustomPieTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const name = payload[0].name;
     const value = payload[0].value;
-    const color = payload[0].color;
 
     return (
       <div
         style={{
-          background: "rgba(18, 24, 33, 0.95)",
-          border: `1px solid ${color}`,
-          borderRadius: "14px",
+          background: "#FFFFFF",
+          border: `1px solid #E5E7EB`,
+          borderRadius: "12px",
           padding: "12px 16px",
-          backdropFilter: "blur(10px)",
-          boxShadow: "0 12px 30px rgba(0,0,0,0.45)",
+          boxShadow: "0 4px 16px rgba(16,17,19,0.08)",
           fontSize: "13px",
           minWidth: "140px",
         }}
       >
-        <div style={{ color, fontWeight: 600, marginBottom: 4 }}>
+        <div style={{ color: "#101113", fontWeight: 600, marginBottom: 4 }}>
           {name}
         </div>
-        <div style={{ color: "#CBD5E1" }}>
-          Value: <strong>{value}</strong>
+        <div style={{ color: "#6B7280" }}>
+          Value: <strong style={{ color: "#101113" }}>{value}</strong>
         </div>
       </div>
     );
@@ -147,13 +144,13 @@ function DashboardPage() {
       console.error(err);
     }
   };
-  
+
 
   return (
     <div className="space-y-14">
 
       {/* METRICS */}
-      <div className="grid gap-8 md:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 
         <StatsCard
           label="Total Active Cases"
@@ -164,16 +161,53 @@ function DashboardPage() {
         <StatsCard
           label="Cases Closing Soon"
           value={overview.casesClosingSoon ?? 0}
-          valueClassName="text-yellow-400"
+          valueClassName="text-warning"
         />
 
         <StatsCard
           label="Overdue Tasks"
           value={overview.overdueTasks ?? 0}
-          valueClassName="text-red-500"
+          valueClassName="text-danger"
+        />
+
+        <StatsCard
+          label="Total Revenue"
+          value={`$${(overview.totalRevenue ?? 0).toLocaleString()}`}
+          valueClassName="text-success"
+          sublabel={user?.role === "Admin" ? "Firm-wide" : "Your cases"}
         />
 
       </div>
+
+      {/* REVENUE BY ATTORNEY (Admin only) */}
+      {user?.role === "Admin" && safeArray(overview.revenueByAttorney).length > 0 && (
+        <div className="rounded-xl border border-border bg-surface p-8 shadow-soft">
+          <h2 className="mb-6 text-sm font-semibold text-textPrimary">
+            Revenue by Attorney
+          </h2>
+
+          <div className="divide-y divide-border">
+            {overview.revenueByAttorney.map((row) => (
+              <div
+                key={row.attorneyId}
+                className="flex items-center justify-between py-4"
+              >
+                <div>
+                  <p className="text-sm font-medium text-textPrimary">
+                    {row.attorneyName}
+                  </p>
+                  <p className="text-xs text-textSecondary mt-1">
+                    {row.caseCount} case{row.caseCount === 1 ? "" : "s"}
+                  </p>
+                </div>
+                <p className="text-lg font-semibold text-success">
+                  ${row.revenue.toLocaleString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* PRIORITY + STATUS */}
       <div className="grid gap-8 lg:grid-cols-3">
@@ -187,13 +221,13 @@ function DashboardPage() {
           <div className="h-80">
             <ResponsiveContainer>
               <BarChart data={safeArray(overview.casesByPriority)} barCategoryGap="20%">
-                <CartesianGrid stroke="#2A2F3A" strokeDasharray="3 3" />
-                <XAxis dataKey="priority" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
+                <CartesianGrid stroke="#E5E7EB" strokeDasharray="3 3" />
+                <XAxis dataKey="priority" stroke="#6B7280" />
+                <YAxis stroke="#6B7280" />
 
                 <Tooltip
                   content={<CustomPriorityTooltip />}
-                  cursor={{ fill: "rgba(255,255,255,0.03)" }}
+                  cursor={{ fill: "rgba(16,17,19,0.04)" }}
                 />
 
                 <Bar
@@ -202,11 +236,11 @@ function DashboardPage() {
                   barSize={60}
                   animationDuration={400}
                 >
-                  <LabelList dataKey="count" position="top" fill="#9CA3AF" />
+                  <LabelList dataKey="count" position="top" fill="#6B7280" />
                   {safeArray(overview.casesByPriority).map((entry, index) => (
                     <Cell
                       key={index}
-                      fill={PRIORITY_COLORS[entry.priority] || "#5A6472"}
+                      fill={PRIORITY_COLORS[entry.priority] || "#9CA3AF"}
                     />
                   ))}
                 </Bar>
@@ -236,7 +270,7 @@ function DashboardPage() {
                   {safeArray(overview.caseStatusDistribution).map((entry, index) => (
                     <Cell
                       key={index}
-                      fill={STATUS_COLORS[entry.status] || "#5A6472"}
+                      fill={STATUS_COLORS[entry.status] || "#9CA3AF"}
                     />
                   ))}
                 </Pie>
@@ -282,11 +316,11 @@ function DashboardPage() {
 
               return (
                 <AreaChart data={lastFiveMonths}>
-                  <CartesianGrid stroke="#2A2F3A" strokeDasharray="3 3" />
+                  <CartesianGrid stroke="#E5E7EB" strokeDasharray="3 3" />
 
                   <XAxis
                     dataKey="date"
-                    stroke="#9CA3AF"
+                    stroke="#6B7280"
                     tickFormatter={(value) => {
                       const [year, month] = value.split("-");
                       const dateObj = new Date(Number(year), Number(month) - 1);
@@ -298,7 +332,7 @@ function DashboardPage() {
                     }}
                   />
 
-                  <YAxis stroke="#9CA3AF" />
+                  <YAxis stroke="#6B7280" />
 
                   <Tooltip
                     content={({ active, payload }) => {
@@ -318,7 +352,7 @@ function DashboardPage() {
                           <p className="text-sm font-semibold text-textPrimary">
                             {formattedDate}
                           </p>
-                          <p className="text-sm text-primary mt-1">
+                          <p className="text-sm text-textSecondary mt-1">
                             Cases: <span className="font-semibold">{count}</span>
                           </p>
                         </div>
@@ -329,15 +363,15 @@ function DashboardPage() {
                   <Area
                     type="monotone"
                     dataKey="count"
-                    stroke="#2F6F6F"
+                    stroke="#101113"
                     strokeWidth={2}
                     fillOpacity={0.2}
-                    fill="#2F6F6F"
+                    fill="#101113"
                   >
                     <LabelList
                       dataKey="count"
                       position="top"
-                      fill="#9CA3AF"
+                      fill="#6B7280"
                     />
                   </Area>
                 </AreaChart>
@@ -364,7 +398,7 @@ function DashboardPage() {
                 <p className="text-xs uppercase tracking-wider text-textSecondary">
                   Cases Closing Within 3 Days
                 </p>
-                <p className="text-3xl font-semibold text-yellow-400">
+                <p className="text-3xl font-semibold text-warning">
                   {overview.casesClosingSoon ?? 0}
                 </p>
               </div>
@@ -382,7 +416,7 @@ function DashboardPage() {
                 <p className="text-xs uppercase tracking-wider text-textSecondary">
                   Overdue Tasks
                 </p>
-                <p className="text-3xl font-semibold text-red-500">
+                <p className="text-3xl font-semibold text-danger">
                   {overview.overdueTasks ?? 0}
                 </p>
               </div>
@@ -403,10 +437,10 @@ function DashboardPage() {
               <div
                 className={`inline-block px-4 py-2 rounded-full text-xs font-medium ${
                   overview.overdueTasks > 10
-                    ? "bg-red-900 text-red-300"
+                    ? "bg-red-50 text-danger"
                     : overview.overdueTasks > 5
-                    ? "bg-yellow-900 text-yellow-300"
-                    : "bg-green-900 text-green-300"
+                    ? "bg-amber-50 text-warning"
+                    : "bg-emerald-50 text-success"
                 }`}
               >
                 {overview.overdueTasks > 10
@@ -487,7 +521,7 @@ function DashboardPage() {
             <div className="flex gap-4">
               <button
                 onClick={() => handleAuditDownload("csv")}
-                className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-black"
+                className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-white"
               >
                 Download CSV
               </button>

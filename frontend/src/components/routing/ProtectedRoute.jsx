@@ -7,7 +7,7 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center text-slate-300">
+      <div className="flex h-screen items-center justify-center bg-background text-textSecondary">
         Loading...
       </div>
     );
@@ -21,4 +21,3 @@ function ProtectedRoute({ children }) {
 }
 
 export default ProtectedRoute;
-

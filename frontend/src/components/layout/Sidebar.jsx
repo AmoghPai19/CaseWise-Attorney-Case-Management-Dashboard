@@ -15,16 +15,21 @@ export default function Sidebar() {
   const { user } = useAuth();
 
   return (
-    <aside className="hidden md:flex w-72 flex-col border-r border-border bg-surface px-8 py-10">
+    <aside className="hidden md:flex w-64 flex-col border-r border-border bg-surface px-6 py-8">
 
       {/* LOGO SECTION */}
-      <div className="mb-14">
-        <h1 className="font-logo text-3xl tracking-wide text-textPrimary">
-          CaseWise
-        </h1>
-        <p className="mt-2 text-xs text-textSecondary tracking-wider uppercase">
-          {user?.role} • {user?.name}
-        </p>
+      <div className="mb-10 flex items-center gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-sm font-semibold text-white">
+          CW
+        </div>
+        <div>
+          <h1 className="font-heading text-base font-semibold leading-tight text-textPrimary">
+            CaseWise
+          </h1>
+          <p className="text-xs text-textSecondary leading-tight">
+            {user?.role}
+          </p>
+        </div>
       </div>
 
       {/* NAVIGATION */}
@@ -35,42 +40,22 @@ export default function Sidebar() {
             to={item.to}
             end={item.to === "/"}
             className={({ isActive }) =>
-              `relative flex items-center gap-4 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${
+              `flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors duration-150 ${
                 isActive
-                  ? "text-textPrimary"
-                  : "text-textSecondary hover:text-textPrimary"
+                  ? "bg-accent text-white"
+                  : "text-textSecondary hover:bg-surfaceHover hover:text-textPrimary"
               }`
             }
           >
-            {({ isActive }) => (
-              <>
-                {/* Accent bar */}
-                {isActive && (
-                  <span className="absolute left-0 top-0 h-full w-1 rounded-r bg-accent" />
-                )}
-
-                {/* Icon */}
-                <span
-                  className={`text-base transition-all duration-200 ${
-                    isActive ? "text-accent" : "opacity-60"
-                  }`}
-                >
-                  {item.icon}
-                </span>
-
-                {/* Label */}
-                <span className="tracking-wide">
-                  {item.label}
-                </span>
-              </>
-            )}
+            <span className="text-base leading-none">{item.icon}</span>
+            <span>{item.label}</span>
           </NavLink>
         ))}
       </nav>
 
-      {/* FOOTER SPACE (optional future use) */}
-      <div className="mt-auto pt-10 text-xs text-textSecondary">
-        <div className="border-t border-border pt-6 opacity-60">
+      {/* FOOTER */}
+      <div className="mt-auto pt-8 text-xs text-textSecondary">
+        <div className="border-t border-border pt-4">
           © {new Date().getFullYear()} CaseWise
         </div>
       </div>

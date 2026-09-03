@@ -1,4 +1,4 @@
-const Case = require('../models/Case');
+﻿const Case = require('../models/Case');
 const Client = require('../models/Client');
 const Document = require('../models/Document');
 
@@ -28,10 +28,12 @@ async function globalSearch(req, res, next) {
       title: regex,
     };
 
+    // NOTE: Document has a `filename` field, not `name` — searching on `name`
+    // silently returned zero matches for every query.
     const [cases, clients, documents] = await Promise.all([
       Case.find(caseFilter).limit(5).select('title'),
       Client.find({ name: regex }).limit(5).select('name'),
-      Document.find({ name: regex }).limit(5).select('name caseId'),
+      Document.find({ filename: regex }).limit(5).select('filename caseId'),
     ]);
 
     const results = [
@@ -48,7 +50,7 @@ async function globalSearch(req, res, next) {
       ...documents.map(d => ({
         type: 'document',
         id: d._id,
-        label: d.name,
+        label: d.filename,
       })),
     ];
 

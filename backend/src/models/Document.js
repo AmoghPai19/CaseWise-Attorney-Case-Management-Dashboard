@@ -38,4 +38,3 @@ const documentSchema = new mongoose.Schema(
 const Document = mongoose.model('Document', documentSchema);
 
 module.exports = Document;
-

@@ -8,7 +8,7 @@ function Pagination({ page, pageSize, total, onPageChange }) {
   if (totalPages <= 1) return null;
 
   return (
-    <div className="mt-4 flex items-center justify-between text-xs text-slate-400">
+    <div className="mt-4 flex items-center justify-between text-xs text-textSecondary">
       <div>
         Page {page} of {totalPages}
       </div>
@@ -17,7 +17,7 @@ function Pagination({ page, pageSize, total, onPageChange }) {
           type="button"
           onClick={() => canPrev && onPageChange(page - 1)}
           disabled={!canPrev}
-          className="rounded-md border border-slate-700 px-2 py-1 disabled:opacity-40"
+          className="rounded-md border border-border px-2 py-1 text-textSecondary hover:text-textPrimary hover:border-accent transition disabled:opacity-40 disabled:hover:text-textSecondary disabled:hover:border-border"
         >
           Previous
         </button>
@@ -25,7 +25,7 @@ function Pagination({ page, pageSize, total, onPageChange }) {
           type="button"
           onClick={() => canNext && onPageChange(page + 1)}
           disabled={!canNext}
-          className="rounded-md border border-slate-700 px-2 py-1 disabled:opacity-40"
+          className="rounded-md border border-border px-2 py-1 text-textSecondary hover:text-textPrimary hover:border-accent transition disabled:opacity-40 disabled:hover:text-textSecondary disabled:hover:border-border"
         >
           Next
         </button>
@@ -35,4 +35,3 @@ function Pagination({ page, pageSize, total, onPageChange }) {
 }
 
 export default Pagination;
-

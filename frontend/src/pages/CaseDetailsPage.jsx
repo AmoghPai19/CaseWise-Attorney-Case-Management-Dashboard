@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import StatusBadge from "../components/common/StatusBadge";
@@ -15,7 +15,7 @@ function CaseDetailsPage() {
   const [editMode, setEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // 🔥 NEW STATES
+  // NEW STATES
   const [taskModal, setTaskModal] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDueDate, setTaskDueDate] = useState("");
@@ -29,6 +29,7 @@ function CaseDetailsPage() {
     priority: "",
     status: "",
     deadline: "",
+    feeAmount: "",
   });
 
   const canManage =
@@ -50,6 +51,7 @@ function CaseDetailsPage() {
         deadline: c.deadline
           ? new Date(c.deadline).toISOString().split("T")[0]
           : "",
+        feeAmount: c.feeAmount ?? 0,
       });
     } catch (err) {
       console.error(err);
@@ -95,7 +97,7 @@ function CaseDetailsPage() {
     }
   };
 
-  // 🔥 CREATE TASK
+  // CREATE TASK
   const handleCreateTask = async () => {
     try {
       setTaskSaving(true);
@@ -119,7 +121,7 @@ function CaseDetailsPage() {
     }
   };
 
-  // 🔥 UPLOAD DOCUMENT
+  // UPLOAD DOCUMENT
   const handleUpload = async (file) => {
     if (!file) return;
 
@@ -194,7 +196,7 @@ function CaseDetailsPage() {
           {canManage && !editMode && (
             <button
               onClick={() => setEditMode(true)}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white"
             >
               Edit Case
             </button>
@@ -211,7 +213,7 @@ function CaseDetailsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white"
               >
                 {saving ? "Saving..." : "Save"}
               </button>
@@ -229,7 +231,7 @@ function CaseDetailsPage() {
         </div>
       </div>
 
-      {/* SUMMARY CARD (UNCHANGED) */}
+      {/* SUMMARY CARD */}
       <div className="rounded-2xl border border-border bg-surface p-8 shadow-soft">
         <h2 className="mb-6 text-sm font-semibold tracking-wide text-textPrimary">
           Executive Summary
@@ -347,6 +349,26 @@ function CaseDetailsPage() {
               }
             />
 
+            <InfoBlock
+              label="Fee Amount"
+              value={
+                editMode ? (
+                  <input
+                    type="number"
+                    min="0"
+                    step="50"
+                    value={form.feeAmount}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, feeAmount: e.target.value }))
+                    }
+                    className="mt-2 w-full rounded-lg bg-surface border border-border text-textPrimary px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent transition"
+                  />
+                ) : (
+                  `$${(caseDoc.feeAmount || 0).toLocaleString()}`
+                )
+              }
+            />
+
             <div className="md:col-span-2">
               <div className="text-[11px] uppercase tracking-wider text-textSecondary">
                 Description
@@ -454,7 +476,7 @@ function CaseDetailsPage() {
 
             <button
               onClick={() => setTaskModal(true)}
-              className="w-full rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black"
+              className="w-full rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white"
             >
               Add Task
             </button>
@@ -504,11 +526,7 @@ function CaseDetailsPage() {
                 type="date"
                 value={taskDueDate}
                 onChange={(e) => setTaskDueDate(e.target.value)}
-                className="rounded-lg border border-border bg-surface px-4 py-2 text-textPrimary 
-                          appearance-none 
-                          [&::-webkit-calendar-picker-indicator]:invert 
-                          [&::-webkit-calendar-picker-indicator]:opacity-80 
-                          [&::-webkit-calendar-picker-indicator]:cursor-pointer" />
+                className="rounded-lg border border-border bg-surface px-4 py-2 text-textPrimary" />
             </div>
 
             <div className="flex justify-end gap-3">
@@ -522,7 +540,7 @@ function CaseDetailsPage() {
               <button
                 onClick={handleCreateTask}
                 disabled={taskSaving}
-                className="px-5 py-2 bg-accent rounded-lg font-medium text-black disabled:opacity-60"
+                className="px-5 py-2 bg-accent rounded-lg font-medium text-white disabled:opacity-60"
               >
                 {taskSaving ? "Creating..." : "Create"}
               </button>

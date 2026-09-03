@@ -111,7 +111,7 @@ function CasesPage() {
           {canCreateCases && (
             <Link
               to="/cases/new"
-              className="rounded-lg bg-accent px-5 py-2 text-sm font-medium text-black transition hover:opacity-90"
+              className="rounded-lg bg-accent px-5 py-2 text-sm font-medium text-white transition hover:opacity-90"
             >
               + New Case
             </Link>
@@ -209,7 +209,7 @@ function CasesPage() {
                             e.stopPropagation();
                             handleDelete(c._id);
                           }}
-                          className="text-sm font-medium text-danger transition hover:text-red-400"
+                          className="text-sm font-medium text-danger transition hover:opacity-70"
                         >
                           Delete Case
                         </button>

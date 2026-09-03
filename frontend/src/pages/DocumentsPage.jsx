@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import api from "../utils/api";
+﻿import React, { useEffect, useState } from "react";
+import api, { SERVER_URL } from "../utils/api";
 import StatusBadge from "../components/common/StatusBadge";
 import { useAuth } from "../state/AuthContext";
 
@@ -157,7 +157,7 @@ function DocumentsPage() {
                     <div className="flex justify-end items-center gap-3">
 
                       <a
-                        href={`http://localhost:5000${d.fileUrl}`}
+                        href={`${SERVER_URL}${d.fileUrl}`}
                         target="_blank"
                         rel="noreferrer"
                         className="rounded-md border border-border px-3 py-1 text-xs text-textPrimary hover:border-accent transition"

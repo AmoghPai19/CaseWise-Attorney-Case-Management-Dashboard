@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 
 const caseSchema = new mongoose.Schema(
   {
@@ -33,6 +33,13 @@ const caseSchema = new mongoose.Schema(
     startDate: { type: Date, default: Date.now },
     deadline: { type: Date, required: true },
     tags: [{ type: String, trim: true }],
+    // Fixed fee for this case. Used to compute per-attorney and firm-wide
+    // revenue on the dashboard.
+    feeAmount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -47,4 +54,3 @@ const caseSchema = new mongoose.Schema(
 const Case = mongoose.model('Case', caseSchema);
 
 module.exports = Case;
-

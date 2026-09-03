@@ -110,18 +110,18 @@ function SettingsPage() {
 
             {/* Status Messages */}
             {error && (
-              <p className="text-sm text-red-500">{error}</p>
+              <p className="text-sm text-danger">{error}</p>
             )}
 
             {success && (
-              <p className="text-sm text-green-400">{success}</p>
+              <p className="text-sm text-success">{success}</p>
             )}
 
             <div className="flex gap-4">
               <button
                 onClick={handleProfileUpdate}
                 disabled={loading}
-                className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-black hover:opacity-90 transition disabled:opacity-50"
+                className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-white hover:opacity-90 transition disabled:opacity-50"
               >
                 {loading ? "Saving..." : "Save Changes"}
               </button>
@@ -218,14 +218,14 @@ function PasswordSection() {
             className="w-full rounded-lg border border-border bg-background px-4 py-2 text-textPrimary focus:outline-none focus:ring-1 focus:ring-accent"
           />
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          {message && <p className="text-sm text-green-400">{message}</p>}
+          {error && <p className="text-sm text-danger">{error}</p>}
+          {message && <p className="text-sm text-success">{message}</p>}
 
           <div className="flex gap-4">
             <button
               onClick={handleChangePassword}
               disabled={loading}
-              className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-black hover:opacity-90 transition disabled:opacity-50"
+              className="rounded-lg bg-accent px-6 py-2 text-sm font-medium text-white hover:opacity-90 transition disabled:opacity-50"
             >
               {loading ? "Updating..." : "Update Password"}
             </button>

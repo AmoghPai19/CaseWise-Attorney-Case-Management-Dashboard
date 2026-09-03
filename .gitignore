@@ -1,4 +1,4 @@
-# Node modules
+﻿# Node modules
 node_modules/
 
 # Build folders
@@ -11,6 +11,10 @@ frontend/build/
 .env
 backend/.env
 frontend/.env
+
+# Uploaded documents (runtime data, not source)
+backend/uploads/*
+!backend/uploads/.gitkeep
 
 # Logs
 logs/

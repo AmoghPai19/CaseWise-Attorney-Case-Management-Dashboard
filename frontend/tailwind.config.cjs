@@ -4,30 +4,30 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#0F1115",
-        surface: "#181B21",
-        surfaceHover: "#1F232B",
-        border: "#2A2F3A",
+        background: "#F7F7F8",
+        surface: "#FFFFFF",
+        surfaceHover: "#FAFAFA",
+        border: "#E5E7EB",
 
-        textPrimary: "#E6E8EC",
-        textSecondary: "#9CA3AF",
+        textPrimary: "#101113",
+        textSecondary: "#6B7280",
 
-        accent: "#C5A75D",
+        accent: "#0A0A0A",
 
-        success: "#2E7D32",
-        danger: "#B94A48",
-        warning: "#B08900"
+        success: "#067647",
+        danger: "#B42318",
+        warning: "#B54708"
       },
 
       fontFamily: {
-        logo: ["BluuNext", "Playfair Display", "serif"],
-        heading: ["Playfair Display", "serif"],
+        logo: ["Inter", "system-ui", "sans-serif"],
+        heading: ["Inter", "system-ui", "sans-serif"],
         body: ["Inter", "system-ui", "sans-serif"]
       },
 
       boxShadow: {
-        soft: "0 4px 20px rgba(0,0,0,0.35)",
-        innerSoft: "inset 0 1px 0 rgba(255,255,255,0.03)"
+        soft: "0 1px 2px rgba(16,17,19,0.04)",
+        innerSoft: "inset 0 1px 0 rgba(16,17,19,0.02)"
       }
     }
   },

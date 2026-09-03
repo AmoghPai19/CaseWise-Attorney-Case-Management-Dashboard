@@ -5,7 +5,7 @@ import Topbar from "./Topbar";
 
 function Layout() {
   return (
-    <div className="flex h-screen bg-gradient-to-br from-background to-[#0c0e12] text-textPrimary">
+    <div className="flex h-screen bg-background text-textPrimary">
       <Sidebar />
 
       <div className="flex flex-1 flex-col overflow-hidden">
